@@ -1,0 +1,22 @@
+.pokemon {
+    padding: 50px;
+    background-color: antiquewhite;
+    width: 235px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.principalPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin: 10px;
+}
+
+.pokemonList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}

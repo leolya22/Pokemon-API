@@ -18,8 +18,8 @@ const PokemonDetail = () => {
 
     return (
         <div>
-            <h1>{ pokemon?.name }</h1>
-            <img src={ pokemon?.sprites.front_default } alt={ pokemon?.name } />
+            <h1>{ name }</h1>
+            <img src={ pokemon?.front_default } alt={ name } />
             <p>Altura: { pokemon?.height }</p>
             <p>Peso: { pokemon?.weight }</p>
         </div>
