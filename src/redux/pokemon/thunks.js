@@ -28,3 +28,18 @@ export const fetchPokemonDetail = createAsyncThunk( 'pokemon/fetchPokemonDetail'
         console.log( error );
     }
 });
+//HACER EL FETCH DE LOS POKEMONES MODIFICADOS EN FIREBASE!!!
+
+//HACER que se guarde solo para el usuario que hizo la modificacion, NO OLVIDARSE!!!!
+export const updatePokemonAsync = createAsyncThunk(
+    'pokemons/updatePokemon',
+    async ({ name, height, weight, abilities }) => {
+        try {
+            const firebaseRef = firebase.database().ref(`${ uid }/pokemons/${ name }`);
+            await firebaseRef.update({ name, height, weight, abilities });
+            return { name, height, weight, abilities };
+        } catch ( error ) {
+            console.log( error );
+        }
+    }
+);

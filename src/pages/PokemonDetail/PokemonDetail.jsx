@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPokemonDetail } from '../../redux/pokemon/thunks';
 import { Link, useParams } from 'react-router-dom';
+
 import styles from './PokemonDetail.module.css'
+import { fetchPokemonDetail } from '../../redux/pokemon/thunks';
+
 
 const PokemonDetail = () => {
     const dispatch = useDispatch();
@@ -54,7 +56,7 @@ const PokemonDetail = () => {
                 </div>
                 <div>
                     <Link className={ styles.botones } to='/'>Volver</Link>
-                    <Link className={ styles.botones } to=''>Editar Pokemon</Link>
+                    <Link className={ styles.botones } to='/pokemon/updateInfo/:name'>Editar Pokemon</Link>
                 </div>
             </div>
         );
