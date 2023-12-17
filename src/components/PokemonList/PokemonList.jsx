@@ -6,7 +6,7 @@ import styles from './PokemonList.module.css'
 
 const PokemonList = () => {
     const dispatch = useDispatch();
-    const { list, status } = useSelector( state => state.pokemon );
+    const { list, status } = useSelector( state => state.pokemons );
 
     useEffect(() => {
         dispatch( fetchPokemonList() );
@@ -18,22 +18,23 @@ const PokemonList = () => {
 
     return (
         <div className={ styles.principalPage }>
-            <h1>Listado de Pokemons</h1>
-                <div className={ styles.pokemonList }>
-                    {list.map( pokemon => (
-                        <div key={ pokemon.name } className={ styles.pokemon }>
-                            <Link to={ `/pokemon/${pokemon.name}` }>
-                                <h2>{ pokemon.name }</h2>
-                                <img src={
-                                    `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.
-                                    url.split('/').reverse()[1]}.png`
-                                    } 
-                                    alt={pokemon.name} 
-                                />
-                            </Link>
-                        </div>
-                    ))}
-                </div>
+            <h1 className={ styles.title }>Listado de Pokemons</h1>
+            <div className={ styles.pokemonList }>
+                {list.map( pokemon => (
+
+                    <div key={ pokemon.name } className={ styles.pokemon }>
+                        <Link to={ `/pokemon/${pokemon.name}` }>
+                            <h2>{ pokemon.name }</h2>
+                            <img src={
+                                `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.
+                                url.split('/').reverse()[1]}.png`
+                                } 
+                                alt={pokemon.name} 
+                            />
+                        </Link>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

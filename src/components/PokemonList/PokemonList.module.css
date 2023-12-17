@@ -1,6 +1,6 @@
 .pokemon {
     padding: 50px;
-    background-color: antiquewhite;
+    background-color: rgb(250, 208, 152);
     width: 235px;
     display: flex;
     justify-content: center;
@@ -19,4 +19,8 @@
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
+}
+
+.title {
+    color: rgb(250, 173, 73);
 }
