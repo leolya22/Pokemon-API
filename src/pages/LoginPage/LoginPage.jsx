@@ -1,16 +1,24 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 
 import { setUser, setError, clearError } from '../../redux/auth/authSlice';
 import firebase from '../../config/firebase';
+import styles from './LoginPage.module.css';
 
 
 const LoginPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [ email, setEmail ] = useState('');
-    const [ password, setPassword ] = useState('');
+    const { user } = useSelector( state => state.auth );
+    const { register, handleSubmit, setError: setFormError, formState: { errors } } = useForm();
+
+    useEffect( () => {
+        if( user ) {
+            navigate( '/' );
+        }
+    }, []);
 
     const handleLogin = async () => {
         try {
@@ -18,29 +26,39 @@ const LoginPage = () => {
             const userCredential = await firebase.auth().signInWithEmailAndPassword( email, password );
             const user = userCredential.user;
             dispatch( setUser( user ) );
-            localStorage.setItem( 'login', user );
             navigate( '/' );
         } catch ( error ) {
+            setFormError( 'password', { type: 'manual', message: 'Invalid email or password' } );
             dispatch( setError( error.message ) );
         }
     };
 
     return (
-        <div>
-            <h1>Ingrese al sitio</h1>
-            <input
-                type="email"
-                placeholder="Email"
-                value={ email }
-                onChange={ e => setEmail( e.target.value ) }
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={ password }
-                onChange={ e => setPassword( e.target.value ) }
-            />
-            <button onClick={ handleLogin }>Login</button>
+        <div className={ styles.container }>
+            <h1 className={ styles.texto }>Ingrese al sitio</h1>
+            <form className={ styles.form } onSubmit={ handleSubmit( handleLogin ) }>
+                <div className={ styles.formGroup }>
+                    <label className={ styles.label }>Email:</label>
+                    <input 
+                        type="text" 
+                        { ...register( 'email', { required: 'Ingrese su email' })}
+                        className={ styles.input }
+                    />
+                    { errors.email && <span className={ styles.error }>{ errors.email.message }</span> }
+                </div>
+                <div className={ styles.formGroup }>
+                    <label className={ styles.label }>Contraseña:</label>
+                    <input 
+                        type="password" 
+                        { ...register( 'password', { required: 'Ingrese su contraseña' })} 
+                        className={ styles.input }
+                    />
+                    { errors.password && <span className={ styles.error }>{ errors.password.message }</span> }
+                </div>
+                <button type="submit" className={ styles.button }>Login</button>
+            </form>
+            <br />
+            <p>Aun no tiene usuario en el sitio? <Link className={ styles.texto } to={'/register'}>Ir a registrarse</Link></p>
         </div>
     );
 };
