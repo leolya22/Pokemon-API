@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { fetchPokemonList } from '../../redux/pokemon/thunks';
 import styles from './PokemonList.module.css'
+import UserMenu from '../../components/UserMenu';
 
 const PokemonList = () => {
     const dispatch = useDispatch();
@@ -19,6 +20,7 @@ const PokemonList = () => {
 
     return (
         <div className={ styles.principalPage }>
+            <UserMenu/>
             <h1 className={ styles.title }>Listado de Pokemons</h1>
             <div className={ styles.pokemonList }>
                 {list.map( pokemon => (

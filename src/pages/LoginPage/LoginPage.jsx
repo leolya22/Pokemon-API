@@ -20,12 +20,12 @@ const LoginPage = () => {
         }
     }, []);
 
-    const handleLogin = async () => {
+    const handleLogin = async ({ email: mail, password }) => {
         try {
             dispatch( clearError() );
-            const userCredential = await firebase.auth().signInWithEmailAndPassword( email, password );
-            const user = userCredential.user;
-            dispatch( setUser( user ) );
+            const userCredential = await firebase.auth().signInWithEmailAndPassword( mail, password );
+            const { displayName, email, uid } = userCredential.user['_delegate'];
+            dispatch( setUser({ displayName, email, uid }));
             navigate( '/' );
         } catch ( error ) {
             setFormError( 'password', { type: 'manual', message: 'Invalid email or password' } );

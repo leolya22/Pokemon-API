@@ -20,15 +20,18 @@ const RegisterPage = () => {
         }
     }, []);
 
-    const handleRegister = async ({ name, email, password }) => {
+    const handleRegister = async ({ name, email: mail, password }) => {
         try {
             dispatch( clearError() );
-            const userCredential = await firebase.auth().createUserWithEmailAndPassword( email, password );
+            
+            const userCredential = await firebase.auth().createUserWithEmailAndPassword( mail, password );
             const firebaseUser = userCredential.user;
             await firebaseUser.updateProfile({
                 displayName: name,
             });
-            dispatch( setUser( firebaseUser ) );
+            const { email, displayName, uid } = firebaseUser;
+
+            dispatch( setUser( { email, displayName, uid } ) );
             navigate( '/' );
         } catch ( error ) {
             setFormError( 'password', { type: 'manual', message: 'Registration failed' } );
