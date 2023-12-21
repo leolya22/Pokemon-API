@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 
 import { fetchPokemonList } from '../../redux/pokemon/thunks';
 import styles from './PokemonList.module.css'
-import UserMenu from '../../components/UserMenu';
+import NavBar from '../../components/NavBar/NavBar';
+import UserMenu from '../../components/UserMenu/UserMenu';
+import Loader from '../../components/Loader/Loader';
 
 const PokemonList = () => {
     const dispatch = useDispatch();
@@ -15,18 +17,22 @@ const PokemonList = () => {
     }, []);
 
     if ( status === 'loading' ) {
-        return <div>Loading...</div>;
+        return <Loader />
     }
 
     return (
         <div className={ styles.principalPage }>
-            <UserMenu/>
+            <NavBar />
+            <UserMenu />
             <h1 className={ styles.title }>Listado de Pokemons</h1>
             <div className={ styles.pokemonList }>
                 {list.map( pokemon => (
 
                     <div key={ pokemon.name } className={ styles.pokemon }>
-                        <Link to={ `/pokemon/${pokemon.name}` }>
+                        <Link 
+                            to={ `/pokemon/${pokemon.name}` }
+                            className={ styles.pokemonName }
+                        >
                             <h2>{ pokemon.name }</h2>
                             <img src={
                                 `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.

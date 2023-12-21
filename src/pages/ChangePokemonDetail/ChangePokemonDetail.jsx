@@ -2,27 +2,31 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 
+import Loader from '../../components/Loader/Loader';
+
+
 const PokemonEdit = () => {
     const dispatch = useDispatch();
     const { pokemon, status } = useSelector( state => state.pokemons );
+    const { uid } = useSelector( state => state.auth.user );
     const { name } = useParams();
-    const [ newHeight, setNewHeight ] = useState(pokemon?.height || '');
-    const [ newWeight, setNewWeight ] = useState(pokemon?.weight || '');
+    const [ newHeight, setNewHeight ] = useState( pokemon?.height || '' );
+    const [ newWeight, setNewWeight ] = useState( pokemon?.weight || '' );
     const [ newAbilities, setNewAbilities ] = useState(
         pokemon?.abilities.map( habilidad => habilidad.ability.name ) || []
     );
 
-    const handleHeightChange = (e) => {
-        setNewHeight(e.target.value);
+    const handleHeightChange = ( e ) => {
+        setNewHeight( e.target.value );
     };
 
-    const handleWeightChange = (e) => {
-        setNewWeight(e.target.value);
+    const handleWeightChange = ( e ) => {
+        setNewWeight( e.target.value );
     };
 
-    const handleAbilitiesChange = (e) => {
+    const handleAbilitiesChange = ( e ) => {
         const abilitiesList = e.target.value.split(',');
-        setNewAbilities(abilitiesList);
+        setNewAbilities( abilitiesList );
     };
 
     const handleUpdatePokemon = async () => {
@@ -32,6 +36,7 @@ const PokemonEdit = () => {
                 height: newHeight,
                 weight: newWeight,
                 abilities: newAbilities.map( ability => ({ ability: { name: ability } })),
+                uid,
             })
         );
         //CREAR EL REDUCER updatePokemon!!!
@@ -39,7 +44,7 @@ const PokemonEdit = () => {
     };
 
     if ( status === 'loading' ) {
-        return <div>Loading...</div>;
+        return <Loader />;
     }
 
     return (
@@ -60,7 +65,7 @@ const PokemonEdit = () => {
                 <input type="text" value={ newAbilities.join(',') } onChange={ handleAbilitiesChange } />
             </label>
             <br />
-            <button onClick={handleUpdatePokemon}>Guardar Cambios</button>
+            <button onClick={ handleUpdatePokemon }>Guardar Cambios</button>
             <br />
             <Link to={`/pokemon/${name}`}>Volver al Detalle</Link>
         </div>

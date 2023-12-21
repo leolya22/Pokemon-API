@@ -33,7 +33,7 @@ export const fetchPokemonDetail = createAsyncThunk( 'pokemon/fetchPokemonDetail'
 //HACER que se guarde solo para el usuario que hizo la modificacion, NO OLVIDARSE!!!!
 export const updatePokemonAsync = createAsyncThunk(
     'pokemons/updatePokemon',
-    async ({ name, height, weight, abilities }) => {
+    async ({ name, height, weight, abilities, uid }) => {
         try {
             const firebaseRef = firebase.database().ref(`${ uid }/pokemons/${ name }`);
             await firebaseRef.update({ name, height, weight, abilities });

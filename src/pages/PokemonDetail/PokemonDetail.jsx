@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import styles from './PokemonDetail.module.css'
 import { fetchPokemonDetail } from '../../redux/pokemon/thunks';
+import Loader from '../../components/Loader/Loader';
 
 
 const PokemonDetail = () => {
@@ -21,7 +22,7 @@ const PokemonDetail = () => {
     };
 
     if ( status === 'loading' ) {
-        return <div>Loading...</div>;
+        return <Loader />;
     }
 
         return (

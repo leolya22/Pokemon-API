@@ -7,17 +7,13 @@
     align-items: center;
 }
 
-.user {
-    margin-left: auto;
-    margin-right: 25px;
-    color: rgb(224, 127, 0);
-    font-weight: 900;
+.pokemonName {
+    text-decoration: none;
+    color: rgb(135, 77, 1);
 }
 
-.user:hover {
-    color: rgb(255, 145, 2);
-    scale: 1.1;
-    transition: 0.5s;
+.pokemonName:hover {
+    color: rgb(255, 145, 0);
 }
 
 .principalPage {
