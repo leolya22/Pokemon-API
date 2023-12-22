@@ -15,6 +15,11 @@ export const fetchPokemonDetail = createAsyncThunk( 'pokemon/fetchPokemonDetail'
         const response = await axios.get( `https://pokeapi.co/api/v2/pokemon/${pokemonName}` );
         const { abilities, height, id, weight } = response.data;
         const { front_default } = response.data.sprites;
+        abilities.forEach( ability => { 
+            delete ability.slot;
+            ability.name = ability.ability.name;
+            delete ability.ability;
+        });
 
         return {
             abilities,
@@ -30,7 +35,6 @@ export const fetchPokemonDetail = createAsyncThunk( 'pokemon/fetchPokemonDetail'
 });
 //HACER EL FETCH DE LOS POKEMONES MODIFICADOS EN FIREBASE!!!
 
-//HACER que se guarde solo para el usuario que hizo la modificacion, NO OLVIDARSE!!!!
 export const updatePokemonAsync = createAsyncThunk(
     'pokemons/updatePokemon',
     async ({ name, height, weight, abilities, uid }) => {

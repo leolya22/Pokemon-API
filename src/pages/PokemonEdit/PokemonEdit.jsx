@@ -12,9 +12,7 @@ const PokemonEdit = () => {
     const { name } = useParams();
     const [ newHeight, setNewHeight ] = useState( pokemon?.height || '' );
     const [ newWeight, setNewWeight ] = useState( pokemon?.weight || '' );
-    const [ newAbilities, setNewAbilities ] = useState(
-        pokemon?.abilities.map( habilidad => habilidad.ability.name ) || []
-    );
+    const [ newAbilities, setNewAbilities ] = useState( pokemon?.abilities || [] );
 
     const handleHeightChange = ( e ) => {
         setNewHeight( e.target.value );
@@ -24,8 +22,20 @@ const PokemonEdit = () => {
         setNewWeight( e.target.value );
     };
 
-    const handleAbilitiesChange = ( e ) => {
-        const abilitiesList = e.target.value.split(',');
+    const handleAbilitieNameChange = ( e ) => {
+        const abilitiesList = newAbilities
+        abilitiesList.map( ( ability, index ) => {
+            const descriptor1 = Object.getOwnPropertyDescriptor(ability, 'name');
+            console.log(descriptor1);
+            if( index == e.target.name ) ability.name = e.target.value;
+        })
+        setNewAbilities( abilitiesList );
+    };
+    const handleAbilitieHiddenChange = ( e ) => {
+        console.log(e.target.checked);
+        const abilitiesList = newAbilities.map( ( ability, index ) => {
+            if( index == e.target.id ) ability.is_hidden = e.target.checked
+        })
         setNewAbilities( abilitiesList );
     };
 
@@ -39,8 +49,6 @@ const PokemonEdit = () => {
                 uid,
             })
         );
-        //CREAR EL REDUCER updatePokemon!!!
-        dispatch( updatePokemon( updatedPokemon ) );
     };
 
     if ( status === 'loading' ) {
@@ -51,19 +59,34 @@ const PokemonEdit = () => {
         <div>
             <h1>Modificar Pokémon - { name }</h1>
             <label>
-                Altura:
+                Altura:  
                 <input type="text" value={ newHeight } onChange={ handleHeightChange } />
             </label>
             <br />
             <label>
-                Peso:
+                Peso:  
                 <input type="text" value={ newWeight } onChange={ handleWeightChange } />
             </label>
             <br />
-            <label>
-                Habilidades (separadas por comas):
-                <input type="text" value={ newAbilities.join(',') } onChange={ handleAbilitiesChange } />
-            </label>
+            <ul>
+                Habilidades:
+                { newAbilities.map( (ability, index) => {
+                    return  <li key={index}>
+                                <label>
+                                    Habilidad { index + 1 }:  
+                                    <input type="text" name={index} value={ ability.name } onChange={ handleAbilitieNameChange } />
+                                </label>
+                                <label>
+                                    Is hidden:  
+                                    <input type="radio" id={index} checked={ ability.is_hidden } onChange={ handleAbilitieHiddenChange } />
+                                </label>
+                            </li>
+                })
+                }
+                <li>
+                    <label></label>
+                </li>
+            </ul>
             <br />
             <button onClick={ handleUpdatePokemon }>Guardar Cambios</button>
             <br />

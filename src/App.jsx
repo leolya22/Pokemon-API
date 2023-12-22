@@ -5,6 +5,7 @@ import PokemonList from './pages/PokemonList/PokemonList';
 import PokemonDetail from './pages/PokemonDetail/PokemonDetail';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
 import LoginPage from './pages/LoginPage/LoginPage';
+import PokemonEdit from './pages/PokemonEdit/PokemonEdit';
 
 
 function App() {
@@ -17,10 +18,11 @@ function App() {
           <>
             <Route path="/" element={ <PokemonList /> } />
             <Route path="/pokemon/:name" element={ <PokemonDetail /> } />
-            {/* HACER UNA PAGINA NOT FOUND */}
+            <Route path='/pokemon/updateInfo/:name' element={ <PokemonEdit />} />
             <Route path="/*" element={ <PokemonList /> } />
           </>
         }
+        {/* HACER UNA PAGINA NOT FOUND */}
         <Route path="/login" element={ <LoginPage /> } />
         <Route path="/register" element={ <RegisterPage /> } />
         <Route path="/*" element={ <LoginPage /> } />

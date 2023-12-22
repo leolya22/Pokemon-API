@@ -42,7 +42,7 @@ const pokemonSlice = createSlice({
         })
         .addCase( updatePokemonAsync.fulfilled, ( state, action ) => {
             state.status = 'succeeded';
-            state.pokemonsByUser = action.payload;
+            state.pokemonsByUser.push( action.payload );
         })
         .addCase( updatePokemonAsync.rejected, ( state, action ) => {
             state.status = 'failed';

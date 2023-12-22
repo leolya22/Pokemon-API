@@ -11,7 +11,7 @@ const PokemonDetail = () => {
     const dispatch = useDispatch();
     const { pokemon, status } = useSelector( state => state.pokemons );
     const { name } = useParams();
-    const [contentVisible, setContentVisible] = useState(true);
+    const [ contentVisible, setContentVisible ] = useState(true);
 
     useEffect(() => {
         dispatch( fetchPokemonDetail( name ) );
@@ -45,19 +45,22 @@ const PokemonDetail = () => {
                         { pokemon?.abilities.map( habilidad => {
                             return habilidad.is_hidden 
                             ? <li className={ styles.habilidadOculta } 
-                                key={ habilidad.ability.name }
+                                key={ habilidad.name }
                             >
-                                { habilidad.ability.name }
+                                { habilidad.name }
                             </li>
-                            : <li key={ habilidad.ability.name }>
-                                { habilidad.ability.name }
+                            : <li key={ habilidad.name }>
+                                { habilidad.name }
                             </li>
                         })}
                     </ul>
                 </div>
-                <div>
+                <div className={ styles.flex }>
                     <Link className={ styles.botones } to='/'>Volver</Link>
-                    <Link className={ styles.botones } to='/pokemon/updateInfo/:name'>Editar Pokemon</Link>
+                    { contentVisible 
+                        ? <p className={ styles['botones-disabled'] }>Editar Pokemon</p>
+                        :<Link className={ styles.botones } to={`/pokemon/updateInfo/${ name }`}>Editar Pokemon</Link>
+                    }
                 </div>
             </div>
         );
