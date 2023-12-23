@@ -20,9 +20,10 @@ export const fetchPokemonDetail = createAsyncThunk( 'pokemon/fetchPokemonDetail'
             ability.name = ability.ability.name;
             delete ability.ability;
         });
+        const obj_abilities = Object.assign({}, abilities);
 
         return {
-            abilities,
+            obj_abilities,
             height,
             id,
             pokemonName,

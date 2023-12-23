@@ -12,7 +12,7 @@ const PokemonEdit = () => {
     const { name } = useParams();
     const [ newHeight, setNewHeight ] = useState( pokemon?.height || '' );
     const [ newWeight, setNewWeight ] = useState( pokemon?.weight || '' );
-    const [ newAbilities, setNewAbilities ] = useState( pokemon?.abilities || [] );
+    const [ newAbilities, setNewAbilities ] = useState( pokemon?.abilities || {} );
 
 
     const handleHeightChange = ( e ) => {

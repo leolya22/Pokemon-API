@@ -42,17 +42,17 @@ const PokemonDetail = () => {
                     <p>Peso: { pokemon?.weight }</p>
                     <h3 className={ styles.habilidades }>Habilidades</h3>
                     <ul>
-                        { pokemon?.abilities.map( habilidad => {
-                            return habilidad.is_hidden 
+                        {pokemon?.obj_abilities ? Object.keys(pokemon?.obj_abilities).map(ability => (
+                            pokemon?.obj_abilities[ability]?.is_hidden 
                             ? <li className={ styles.habilidadOculta } 
-                                key={ habilidad.name }
+                                key={ pokemon?.obj_abilities[ability]?.name }
                             >
-                                { habilidad.name }
+                                { pokemon?.obj_abilities[ability]?.name }
                             </li>
-                            : <li key={ habilidad.name }>
-                                { habilidad.name }
+                            : <li key={ pokemon?.obj_abilities[ability]?.name }>
+                                { pokemon?.obj_abilities[ability]?.name }
                             </li>
-                        })}
+                        )) : <></>}
                     </ul>
                 </div>
                 <div className={ styles.flex }>
