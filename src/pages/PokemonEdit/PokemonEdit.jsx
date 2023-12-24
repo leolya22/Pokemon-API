@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 
 import Loader from '../../components/Loader/Loader';
+import styles from './PokemonEdit.module.css'
 
 
 const PokemonEdit = () => {
@@ -12,7 +13,7 @@ const PokemonEdit = () => {
     const { name } = useParams();
     const [ newHeight, setNewHeight ] = useState( pokemon?.height || '' );
     const [ newWeight, setNewWeight ] = useState( pokemon?.weight || '' );
-    const [ newAbilities, setNewAbilities ] = useState( pokemon?.abilities || {} );
+    const [ newAbilities, setNewAbilities ] = useState( pokemon?.obj_abilities || {} );
 
 
     const handleHeightChange = ( e ) => {
@@ -23,19 +24,12 @@ const PokemonEdit = () => {
         setNewWeight( e.target.value );
     };
 
-    const handleAbilitieHiddenChange = ( e, key ) => {
-        const [{ is_hidden, name }] = newAbilities.filter( ability => newAbilities.indexOf( ability ) == key );
-        const otherAbilities = newAbilities.filter( ability => newAbilities.indexOf( ability ) != key )
-        const abilitiesArray = [];
-        
-        if( e.target.type === 'radio' ) {
-            abilitiesArray[key] = { name, is_hidden: e.target.checked }
-            setNewAbilities([ ...otherAbilities ,  ]);
+    const handleAbilitieHiddenChange = ( e, index ) => {
+        if( e.target.type === 'checkbox' ) {
+            setNewAbilities({ ...newAbilities, [ index ]: { ...newAbilities[ index ], is_hidden: e.target.checked }});
         } else {
-            const abilitiesArray = [];
-            abilitiesArray[key] = { is_hidden, name: e.target.value }
-            setNewAbilities([ ...otherAbilities , ]);
-        };
+            setNewAbilities({ ...newAbilities, [ index ]: { ...newAbilities[ index ], name: e.target.value }});
+        }
     };
 
     const handleUpdatePokemon = async () => {
@@ -55,47 +49,59 @@ const PokemonEdit = () => {
     }
 
     return (
-        <div>
-            <h1>Modificar Pokémon - { name }</h1>
-            <label>
-                Altura:  
-                <input type="text" value={ newHeight } onChange={ handleHeightChange } />
-            </label>
-            <br />
-            <label>
-                Peso:  
-                <input type="text" value={ newWeight } onChange={ handleWeightChange } />
-            </label>
-            <br />
-            <ul>
-                Habilidades:
-                { newAbilities.map( (ability, index) => {
-                    return  <li key={index}>
-                                <label>
-                                    Habilidad { index + 1 }:  
-                                    <input 
-                                        type="text" 
-                                        name={index} 
-                                        value={ ability.name } 
-                                        onChange={ (e) => handleAbilitieHiddenChange( e, index ) } 
-                                    />
-                                </label>
-                                <label>
-                                    Is hidden:  
-                                    <input type="radio" id={index} checked={ ability.is_hidden } onChange={ (e) => handleAbilitieHiddenChange( e, index ) } />
-                                </label>
-                            </li>
-                })
-                }
-                <li>
-                    <label>asfa</label>
-                    <input type="radio" />
-                </li>
-            </ul>
-            <br />
-            <button onClick={ handleUpdatePokemon }>Guardar Cambios</button>
-            <br />
-            <Link to={`/pokemon/${name}`}>Volver al Detalle</Link>
+        <div className={ styles.pokemon }>
+            <h1 className={ styles.texto }>Modificar Pokemon - <b>{ name }</b></h1>
+            <div className={ styles['anim-border'] }>
+                <label className={ styles.label }>
+                    Altura:  
+                    <input 
+                        type="text" 
+                        value={ newHeight } 
+                        onChange={ handleHeightChange } 
+                        className={ styles.input }
+                    />
+                </label>
+                <br />
+                <label className={ styles.label }>
+                    Peso:  
+                    <input 
+                        type="text" 
+                        value={ newWeight } 
+                        onChange={ handleWeightChange }
+                        className={ styles.input }
+                    />
+                </label>
+                <br />
+                <ul>
+                    <h3 className={ styles.habilidades }>Habilidades:</h3>
+                    { Object.keys( newAbilities ).map( ability => (
+                        <li key={ ability }>
+                            <label className={ styles.label }>
+                                Habilidad { +ability + 1 }:  
+                                <input 
+                                    type="text" 
+                                    value={ newAbilities[ ability ].name } 
+                                    onChange={ e => handleAbilitieHiddenChange( e, ability ) } 
+                                    className={ styles.input } 
+                                />
+                            </label>
+                            <label className={ styles.label }>
+                                Is hidden:  
+                                <input 
+                                    type="checkbox" 
+                                    checked={ newAbilities[ ability ].is_hidden } 
+                                    onChange={ e => handleAbilitieHiddenChange( e, ability ) }
+                                    className={ styles.input } 
+                                />
+                            </label>
+                        </li>
+                    ))}
+                </ul>
+                <div className={ styles.flex }>
+                    <button className={ styles.botones } onClick={ handleUpdatePokemon }>Guardar Cambios</button>
+                    <Link className={ styles.botones } to={`/pokemon/${name}`}>Volver al Detalle</Link>
+                </div>
+            </div>
         </div>
     );
 };
