@@ -32,13 +32,17 @@ const PokemonEdit = () => {
         }
     };
 
+    const addAbility = () => {
+        setNewAbilities({ ...newAbilities, [ +Object.keys( newAbilities ).length ]: { name: '', is_hidden: false }});
+    }
+
     const handleUpdatePokemon = async () => {
         dispatch(
             updatePokemonAsync({
                 name,
                 height: newHeight,
                 weight: newWeight,
-                abilities: newAbilities.map( ability => ({ ability: { name: ability } })),
+                obj_abilities: newAbilities,
                 uid,
             })
         );
@@ -50,8 +54,9 @@ const PokemonEdit = () => {
 
     return (
         <div className={ styles.pokemon }>
-            <h1 className={ styles.texto }>Modificar Pokemon - <b>{ name }</b></h1>
+            <h1 className={ styles.texto }>Modificar Pokemon</h1>
             <div className={ styles['anim-border'] }>
+                <h2><b>{ name }</b></h2>
                 <label className={ styles.label }>
                     Altura:  
                     <input 
@@ -71,32 +76,37 @@ const PokemonEdit = () => {
                         className={ styles.input }
                     />
                 </label>
-                <br />
-                <ul>
-                    <h3 className={ styles.habilidades }>Habilidades:</h3>
+                <h3 className={ styles.habilidades }>Habilidades:</h3>
+                <ul className={ styles.list }>
                     { Object.keys( newAbilities ).map( ability => (
-                        <li key={ ability }>
-                            <label className={ styles.label }>
-                                Habilidad { +ability + 1 }:  
-                                <input 
-                                    type="text" 
-                                    value={ newAbilities[ ability ].name } 
-                                    onChange={ e => handleAbilitieHiddenChange( e, ability ) } 
-                                    className={ styles.input } 
-                                />
-                            </label>
-                            <label className={ styles.label }>
-                                Is hidden:  
-                                <input 
-                                    type="checkbox" 
-                                    checked={ newAbilities[ ability ].is_hidden } 
-                                    onChange={ e => handleAbilitieHiddenChange( e, ability ) }
-                                    className={ styles.input } 
-                                />
-                            </label>
+                        <li className={ styles.li } key={ ability }>
+                            <h4>Habilidad { +ability + 1 }:</h4>
+                            <div className={ styles.habilidad }>
+                                <label className={ styles.label }>
+                                    <input 
+                                        type="text" 
+                                        value={ newAbilities[ ability ].name } 
+                                        onChange={ e => handleAbilitieHiddenChange( e, ability ) } 
+                                        className={ styles.input } 
+                                    />
+                                </label>
+                                <label className={ styles.label }>
+                                    Is hidden:  
+                                    <input 
+                                        type="checkbox" 
+                                        checked={ newAbilities[ ability ].is_hidden } 
+                                        onChange={ e => handleAbilitieHiddenChange( e, ability ) }
+                                        className={ styles.input } 
+                                    />
+                                </label>
+                            </div>
                         </li>
                     ))}
                 </ul>
+                { !newHeight &&
+                    <p className={ styles.error }>No hay estatura</p>
+                }
+                <button className={ styles.botones } onClick={ addAbility }>Agregar habilidad</button>
                 <div className={ styles.flex }>
                     <button className={ styles.botones } onClick={ handleUpdatePokemon }>Guardar Cambios</button>
                     <Link className={ styles.botones } to={`/pokemon/${name}`}>Volver al Detalle</Link>
