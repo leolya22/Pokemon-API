@@ -47,6 +47,9 @@ const PokemonEdit = () => {
             })
         );
     };
+    
+    const pokemonCompleted = !!newHeight && !! newWeight 
+    && Object.keys( newAbilities ).map( ability => newAbilities[ ability ].name == '').indexOf(true) == -1
 
     if ( status === 'loading' ) {
         return <Loader />;
@@ -78,39 +81,83 @@ const PokemonEdit = () => {
                 </label>
                 <h3 className={ styles.habilidades }>Habilidades:</h3>
                 <ul className={ styles.list }>
-                    { Object.keys( newAbilities ).map( ability => (
-                        <li className={ styles.li } key={ ability }>
-                            <h4>Habilidad { +ability + 1 }:</h4>
-                            <div className={ styles.habilidad }>
-                                <label className={ styles.label }>
-                                    <input 
-                                        type="text" 
-                                        value={ newAbilities[ ability ].name } 
-                                        onChange={ e => handleAbilitieHiddenChange( e, ability ) } 
-                                        className={ styles.input } 
-                                    />
-                                </label>
-                                <label className={ styles.label }>
-                                    Is hidden:  
-                                    <input 
-                                        type="checkbox" 
-                                        checked={ newAbilities[ ability ].is_hidden } 
-                                        onChange={ e => handleAbilitieHiddenChange( e, ability ) }
-                                        className={ styles.input } 
-                                    />
-                                </label>
-                            </div>
-                        </li>
-                    ))}
+                    { 
+                        Object.keys( newAbilities ).map( ability => (
+                            <li className={ styles.li } key={ ability }>
+                                <h4>Habilidad { +ability + 1 }:</h4>
+                                <div className={ styles.habilidad }>
+                                    <label className={ styles.label }>
+                                        <input 
+                                            type="text" 
+                                            value={ newAbilities[ ability ].name } 
+                                            onChange={ e => handleAbilitieHiddenChange( e, ability ) } 
+                                            className={ styles.input } 
+                                        />
+                                    </label>
+                                    <label className={ styles.label }>
+                                        Is hidden:  
+                                        <input 
+                                            type="checkbox" 
+                                            checked={ newAbilities[ ability ].is_hidden } 
+                                            onChange={ e => handleAbilitieHiddenChange( e, ability ) }
+                                            className={ styles.input } 
+                                        />
+                                    </label>
+                                </div>
+                            </li>
+                        ))
+                    }
                 </ul>
-                { !newHeight &&
-                    <p className={ styles.error }>No hay estatura</p>
+                { 
+                    pokemonCompleted || <p className={ styles.error }>Por favor complete los campos faltantes!</p> 
                 }
-                <button className={ styles.botones } onClick={ addAbility }>Agregar habilidad</button>
-                <div className={ styles.flex }>
-                    <button className={ styles.botones } onClick={ handleUpdatePokemon }>Guardar Cambios</button>
-                    <Link className={ styles.botones } to={`/pokemon/${name}`}>Volver al Detalle</Link>
-                </div>
+                { !pokemonCompleted 
+                    ? 
+                        <>
+                            { Object.keys( newAbilities ).length < 6 
+                                ?
+                                    <button className={ styles['botones-disabled']} >
+                                        Agregar habilidad
+                                    </button>
+                                :
+                                    <button className={ styles['botones-disabled']} >
+                                        Maximo de hablidades alcanzado
+                                    </button>
+                            }
+                            <div className={ styles.flex }>
+                                <button className={ styles['botones-disabled']} >
+                                    Guardar Cambios
+                                </button>
+                                <Link className={ styles.botones } to={`/pokemon/${name}`}>Volver al Detalle</Link>
+                            </div>
+                        </>
+                    : 
+                        Object.keys( newAbilities ).length < 6 
+                            ?
+                                <>
+                                    <button className={ styles.botones } onClick={ addAbility } >
+                                        Agregar habilidad
+                                    </button>
+                                    <div className={ styles.flex }>
+                                        <button className={ styles.botones } onClick={ handleUpdatePokemon } >
+                                            Guardar Cambios
+                                        </button>
+                                        <Link className={ styles.botones } to={`/pokemon/${name}`}>Volver al Detalle</Link>
+                                    </div>
+                                </>
+                            :
+                                <>
+                                    <button className={ styles['botones-disabled']} >
+                                        Maximo de hablidades alcanzado
+                                    </button>
+                                    <div className={ styles.flex }>
+                                        <button className={ styles.botones } onClick={ handleUpdatePokemon } >
+                                            Guardar Cambios
+                                        </button>
+                                        <Link className={ styles.botones } to={`/pokemon/${name}`}>Volver al Detalle</Link>
+                                    </div>
+                                </>
+                }
             </div>
         </div>
     );

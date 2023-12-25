@@ -24,7 +24,7 @@ const PokemonList = () => {
         <div className={ styles.principalPage }>
             <NavBar />
             <UserMenu />
-            <h1 className={ styles.title }>Listado de Pokemons</h1>
+            <h1 className={ styles.title }>Listado de Pokemones</h1>
             <div className={ styles.pokemonList }>
                 {list.map( pokemon => (
 

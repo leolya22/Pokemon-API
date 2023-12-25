@@ -25,7 +25,7 @@ const UserMenu = () => {
       <span onClick={ toggleMenu }>{ displayName }</span>
       { menuVisible && (
         <div className={ styles.menuContent }>
-          <button onClick={ handleLogout }>Logout</button>
+          <button onClick={ handleLogout }>Salir</button>
         </div>
       )}
     </div>
