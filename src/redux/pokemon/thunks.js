@@ -1,6 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+import firebase from '../../config/firebase';
+
+
 export const fetchPokemonList = createAsyncThunk( 'pokemon/fetchPokemonList', async () => {
     try {
         const response = await axios.get( 'https://pokeapi.co/api/v2/pokemon?limit=100' );
@@ -38,13 +41,18 @@ export const fetchPokemonDetail = createAsyncThunk( 'pokemon/fetchPokemonDetail'
 
 export const updatePokemonAsync = createAsyncThunk(
     'pokemons/updatePokemon',
-    async ({ name, height, weight, abilities, uid }) => {
+    async ({ name, height, weight, obj_abilities, uid }) => {
         try {
-            const firebaseRef = firebase.database().ref(`${ uid }/pokemons/${ name }`);
-            await firebaseRef.update({ name, height, weight, abilities });
-            return { name, height, weight, abilities };
+            const response = await firebase.firestore().collection(uid).add({ name, height, weight, obj_abilities });
+            const id_pokemon = response.id
+            return { name, height, weight, obj_abilities, id_pokemon };
         } catch ( error ) {
             console.log( error );
         }
     }
 );
+
+export async function deleteProduct(id) {
+    const response = await firebase.firestore().collection("products").doc(id).delete();
+    return response;
+}

@@ -4,6 +4,7 @@ import { useParams, Link } from 'react-router-dom';
 
 import Loader from '../../components/Loader/Loader';
 import styles from './PokemonEdit.module.css'
+import { updatePokemonAsync } from '../../redux/pokemon/thunks';
 
 
 const PokemonEdit = () => {
