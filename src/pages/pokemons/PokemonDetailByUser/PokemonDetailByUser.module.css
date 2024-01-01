@@ -1,0 +1,44 @@
+.pokemon {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    align-items: center;
+    justify-content: center;
+    margin: 100px auto;
+}
+
+.flex {
+    display: flex;
+    justify-content: space-between;
+}
+
+.botones {
+    padding: 15px;
+    margin: 10px;
+    text-decoration: none;
+    background-color: rgb(250, 208, 152);
+    color: rgb(126, 72, 0);
+    border: 1px solid rgb(126, 72, 0);
+    box-shadow: 1px 2px 2px 2px;
+}
+
+.botones:hover {
+    color: rgb(235, 134, 3);
+    border-color: rgb(235, 134, 3);
+}
+
+.botones-disabled {
+    padding: 15px;
+    margin: 10px;
+    text-decoration: none;
+    background-color: rgb(203, 174, 135);
+    color: rgb(129, 93, 45);
+    border: 1px solid rgb(129, 93, 45);
+    box-shadow: 1px 2px 2px 2px;
+    cursor: not-allowed;
+}
+
+
+.botones:active {
+    box-shadow: none;
+}

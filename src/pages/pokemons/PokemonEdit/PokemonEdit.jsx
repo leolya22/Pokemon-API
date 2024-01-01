@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
-import Loader from '../../components/Loader/Loader';
+import Loader from '../../../components/Loader/Loader';
 import styles from './PokemonEdit.module.css'
-import { updatePokemonAsync } from '../../redux/pokemon/thunks';
+import { updatePokemonAsync } from '../../../redux/pokemon/thunks';
 
 
 const PokemonEdit = () => {
@@ -15,6 +15,7 @@ const PokemonEdit = () => {
     const [ newHeight, setNewHeight ] = useState( pokemon?.height || '' );
     const [ newWeight, setNewWeight ] = useState( pokemon?.weight || '' );
     const [ newAbilities, setNewAbilities ] = useState( pokemon?.obj_abilities || {} );
+    const navigate = useNavigate();
 
 
     const handleHeightChange = ( e ) => {
@@ -38,6 +39,7 @@ const PokemonEdit = () => {
     }
 
     const handleUpdatePokemon = async () => {
+        const { url } = pokemon;
         dispatch(
             updatePokemonAsync({
                 name,
@@ -45,8 +47,10 @@ const PokemonEdit = () => {
                 weight: newWeight,
                 obj_abilities: newAbilities,
                 uid,
+                url
             })
         );
+        navigate('/myPokemons');
     };
     
     const pokemonCompleted = !!newHeight && !! newWeight 

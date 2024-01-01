@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchPokemonDetail, fetchPokemonList, updatePokemonAsync } from './thunks';
+import { deletePokemon, fetchPokemonDetail, fetchPokemonList, fetchUpdatedPokemons, updatePokemonAsync } from './thunks';
 
 
 const pokemonSlice = createSlice({
@@ -26,6 +26,7 @@ const pokemonSlice = createSlice({
             state.status = 'failed';
             state.error = action.error.message;
         })
+
         .addCase( fetchPokemonDetail.pending, ( state ) => {
             state.status = 'loading';
         })
@@ -37,14 +38,37 @@ const pokemonSlice = createSlice({
             state.status = 'failed';
             state.error = action.error.message;
         })
+
         .addCase( updatePokemonAsync.pending, ( state ) => {
             state.status = 'loading';
         })
-        .addCase( updatePokemonAsync.fulfilled, ( state, action ) => {
+        .addCase( updatePokemonAsync.fulfilled, ( state ) => {
             state.status = 'succeeded';
-            state.pokemonsByUser.push( action.payload );
         })
         .addCase( updatePokemonAsync.rejected, ( state, action ) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
+
+        .addCase( fetchUpdatedPokemons.pending, ( state ) => {
+            state.status = 'loading';
+        })
+        .addCase( fetchUpdatedPokemons.fulfilled, ( state, action ) => {
+            state.status = 'succeeded';
+            state.pokemonsByUser = action.payload;
+        })
+        .addCase( fetchUpdatedPokemons.rejected, ( state, action ) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
+        
+        .addCase( deletePokemon.pending, ( state ) => {
+            state.status = 'loading';
+        })
+        .addCase( deletePokemon.fulfilled, ( state ) => {
+            state.status = 'succeeded';
+        })
+        .addCase( deletePokemon.rejected, ( state, action ) => {
             state.status = 'failed';
             state.error = action.error.message;
         });

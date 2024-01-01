@@ -6,7 +6,7 @@ const NavBar = () => {
     return (
         <nav className={ styles.navbar }>
             <Link className={ styles.navbarItem } to="/">Pokemons de API</Link>
-            <Link className={ styles.navbarItem } to="/">Mis Pokemones</Link>
+            <Link className={ styles.navbarItem } to="/myPokemons">Mis Pokemones</Link>
         </nav>
     );
 };

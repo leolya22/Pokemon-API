@@ -3,35 +3,29 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 
-import { setUser, setError, clearError } from '../../redux/auth/authSlice';
-import firebase from '../../config/firebase';
 import styles from './LoginPage.module.css';
+import { login } from '../../../redux/auth/thunks';
+import Loader from '../../../components/Loader/Loader';
 
 
 const LoginPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user } = useSelector( state => state.auth );
+    const { error, status } = useSelector( state => state.auth );
     const { register, handleSubmit, setError: setFormError, formState: { errors } } = useForm();
 
     useEffect( () => {
-        if( user ) {
-            navigate( '/' );
-        }
-    }, []);
+        error && setFormError( 'password', { type: 'manual', message: 'El email o la contraseña son incorrectos' });
+    }, [ error ]);
 
-    const handleLogin = async ({ email: mail, password }) => {
-        try {
-            dispatch( clearError() );
-            const userCredential = await firebase.auth().signInWithEmailAndPassword( mail, password );
-            const { displayName, email, uid } = userCredential.user['_delegate'];
-            dispatch( setUser({ displayName, email, uid }));
-            navigate( '/' );
-        } catch ( error ) {
-            setFormError( 'password', { type: 'manual', message: 'Invalid email or password' } );
-            dispatch( setError( error.message ) );
-        }
+    const handleLogin = async ({ email, password }) => {
+        dispatch( login( { email, password }));
+        navigate('/');
     };
+
+    if ( status === 'loading' ) {
+        return <Loader />;
+    }
 
     return (
         <div className={ styles.container }>

@@ -3,45 +3,39 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 
-import { setUser, setError, clearError } from '../../redux/auth/authSlice';
-import firebase from '../../config/firebase';
 import styles from './RegisterPage.module.css';
+import Loader from '../../../components/Loader/Loader';
+import { registerUser } from '../../../redux/auth/thunks';
 
 
 const RegisterPage = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user } = useSelector( state => state.auth );
+    const { user, status, error } = useSelector( state => state.auth );
     const { register, handleSubmit, setError: setFormError, formState: { errors } } = useForm();
 
     useEffect( () => {
         if( user ) {
             navigate( '/' );
         }
-    }, []);
+    }, [ user ]);
 
-    const handleRegister = async ({ name, email: mail, password }) => {
-        try {
-            dispatch( clearError() );
-            
-            const userCredential = await firebase.auth().createUserWithEmailAndPassword( mail, password );
-            const firebaseUser = userCredential.user;
-            await firebaseUser.updateProfile({
-                displayName: name,
-            });
-            const { email, displayName, uid } = firebaseUser;
+    useEffect( () => {
+        error && setFormError( 'email', { type: 'manual', message: 'El email ya esta registrado' })
+    }, [ error ]);
 
-            dispatch( setUser( { email, displayName, uid } ) );
-            navigate( '/' );
-        } catch ( error ) {
-            setFormError( 'password', { type: 'manual', message: 'Registration failed' } );
-            dispatch( setError( error.message ) );
-        }
+    const handleRegister = ({ name, email, password }) => {
+        dispatch( registerUser({ name, email, password }) );
     };
+
+    if ( status === 'loading' ) {
+        return <Loader />;
+    }
 
     return (
         <div className={ styles.container }>
             <h1 className={ styles.texto }>Complete el formulario para registrarse</h1>
+
             <form className={ styles.form } onSubmit={ handleSubmit( handleRegister ) }>
                 <div className={ styles.formGroup }>
                     <label className={ styles.label }>Nombre:</label>
@@ -55,6 +49,7 @@ const RegisterPage = () => {
                     />
                     { errors.name && <span className={ styles.error }>{ errors.name.message }</span> }
                 </div>
+
                 <div className={ styles.formGroup }>
                     <label className={ styles.label }>Email:</label>
                     <input 
@@ -64,6 +59,7 @@ const RegisterPage = () => {
                     />
                     { errors.email && <span className={ styles.error }>{ errors.email.message }</span> }
                 </div>
+
                 <div className={ styles.formGroup }>
                     <label className={ styles.label }>Contraseña:</label>
                     <input 
@@ -76,6 +72,7 @@ const RegisterPage = () => {
                     />
                     { errors.password && <span className={ styles.error }>{ errors.password.message }</span> }
                 </div>
+
                 <button type="submit" className={ styles.button }>Register</button>
             </form>
             <br />
